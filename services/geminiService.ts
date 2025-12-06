@@ -1,6 +1,18 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.API_KEY || '';
+// Safely access process.env to avoid "process is not defined" crashes in browser
+const getApiKey = () => {
+  try {
+    if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+      return process.env.API_KEY;
+    }
+  } catch (e) {
+    // Ignore error if process is not defined
+  }
+  return '';
+};
+
+const apiKey = getApiKey();
 const ai = new GoogleGenAI({ apiKey });
 
 export const explainCode = async (code: string, context: string): Promise<string> => {
@@ -68,12 +80,6 @@ export const chatWithExpert = async (message: string, history: {role: string, pa
     if (!apiKey) return "API Key is missing.";
 
     try {
-        // Convert simplified history to Gemini format if needed, but for single-turn or simple chat state in React:
-        // We will just use generateContent with system instruction if we don't maintain a Chat object, 
-        // OR use a persistent Chat object. For simplicity in this stateless service call, we'll use generateContent with history as context text or use chat if we can keep state.
-        // Let's use a fresh chat session for simplicity in this demo structure, or pass history.
-        
-        // Better approach for this snippet: Just answer the question as an expert.
          const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: `You are a Rust expert helping a developer prepare for an interview. Answer this question concisely: ${message}`,

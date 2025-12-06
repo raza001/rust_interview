@@ -55,7 +55,7 @@ function App() {
             
             {/* Hero Section */}
             {activeCategory === 'all' && !searchQuery && (
-              <div className="mb-12 pt-4 relative">
+              <div className="mb-12 pt-4 relative animate-in fade-in slide-in-from-top-4 duration-700">
                  <div className="absolute -top-10 -left-10 w-48 h-48 bg-rust-500/20 rounded-full blur-[100px] pointer-events-none"></div>
                  <div className="relative z-10">
                     <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
